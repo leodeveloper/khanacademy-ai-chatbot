@@ -1,0 +1,10 @@
+unstructured
+streamlit
+langchain_community
+langchain
+langchain-chroma
+langchain_groq
+sentence-transformers
+python-dotenv
+langchain-huggingface
+#pysqlite3-binary
