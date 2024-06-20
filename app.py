@@ -20,6 +20,8 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
+import chromadb
+import chromadb.config
 
 st.set_page_config(page_title="BBC youtube channel Generative ai chatbot", page_icon="")
 
