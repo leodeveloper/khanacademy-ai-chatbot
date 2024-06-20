@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
-llm = ChatGroq(temperature=0.5,model="mixtral-8x7b-32768")
+llm = ChatGroq(temperature=0,model="gemma-7b-it")
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
@@ -44,14 +44,14 @@ Helpful Answer:
 """
 
 def loadModel(question):
-    question = f"{question}, please add the youtube video title, publish date, youtubelink"
+    question = f"{question}"
     st.write(f"You asked: {question}")
     modelname=os.getenv("modelname")
     collectionname=os.getenv("collectionname")
 
     embedding_function = SentenceTransformerEmbeddings(model_name=modelname)
     db=Chroma(collection_name=collectionname,embedding_function=embedding_function,persist_directory="./embeding/chromadb")
-    retriever = db.as_retriever(search_type="mmr",search_kwargs={'k':2})
+    retriever = db.as_retriever(search_type="mmr",search_kwargs={'k':1})
     #search_kwargs={'k':1}
     #"What donalod trump said about the FBI raid? and what happened in pakistan floods?"
     #response2=retriever.invoke(question)
@@ -72,16 +72,18 @@ def loadModel(question):
     #chain = prompt | llm
     response=qa_chain.invoke(question)
     process_llm_response(response)
-    #custom_rag_prompt = PromptTemplate.from_template(template)
+    st.write("--------------------------------------------")
+    custom_rag_prompt = PromptTemplate.from_template(template)
 
-    #rag_chain = (
-    #    {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    #    | custom_rag_prompt
-    #    | llm
-    #    | StrOutputParser()
-    #    )
+    rag_chain = (
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | custom_rag_prompt
+        | llm
+        | StrOutputParser()
+        )
     
-    #response=rag_chain.invoke(f"{question} please must include the youtube url and publish date in the answer")
+    response=rag_chain.invoke(f"{question} please must include the youtube url and publish date in the answer")
+    st.write(response)
     #return response
 
 
