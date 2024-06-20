@@ -8,6 +8,7 @@ sentence-transformers
 python-dotenv
 langchain-huggingface
 chromadb
+#only install for local
 #pysqlite3
 #do not install locally only for the streamlit
 pysqlite3-binary
