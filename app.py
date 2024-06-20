@@ -56,7 +56,7 @@ def loadModel(question):
     collectionname=os.getenv("collectionname")
 
     embedding_function = SentenceTransformerEmbeddings(model_name=modelname)
-    db=Chroma(collection_name=collectionname,embedding_function=embedding_function,persist_directory="./embeding/chromadb")
+    db=Chroma(collection_name=collectionname,embedding_function=embedding_function,persist_directory="embeding/chromadb")
     retriever = db.as_retriever(search_type="mmr",search_kwargs={'k':1})
     #search_kwargs={'k':1}
     #"What donalod trump said about the FBI raid? and what happened in pakistan floods?"
@@ -70,14 +70,14 @@ def loadModel(question):
     chain_type_kwargs = {"prompt": llama_prompt}
 
     # create the chain to answer questions
-    qa_chain = RetrievalQA.from_chain_type(llm=llm,
-                                    chain_type="stuff",
-                                    retriever=retriever,
-                                    return_source_documents=True)
+    #qa_chain = RetrievalQA.from_chain_type(llm=llm,
+    #                                chain_type="stuff",
+    #                                retriever=retriever,
+    #                                return_source_documents=True)
 
     #chain = prompt | llm
-    response=qa_chain.invoke(question)
-    process_llm_response(response)
+    #response=qa_chain.invoke(question)
+    #process_llm_response(response)
     st.write("--------------------------------------------")
     custom_rag_prompt = PromptTemplate.from_template(template)
 
