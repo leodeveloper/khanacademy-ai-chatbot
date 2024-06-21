@@ -129,6 +129,7 @@ st.title("BBC Youtube Channel")
 # Big question bar
 st.write("Generative AI BBC youtube channel chatbot.")
 st.write("Last update on 18 June 2024, 4588 video's are available for question and answers")
+st.write("For full transcripts in English and other languages, email me at leodeveloper@gmail.com.")
 question = st.text_input("Ask any question regarding the bbc news youtube channel video's.")
 
 # Submit button
