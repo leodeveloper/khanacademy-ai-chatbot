@@ -128,7 +128,7 @@ st.title("BBC Youtube Channel")
 
 # Big question bar
 st.write("Generative AI BBC youtube channel chatbot.")
-st.write("Last update on 18 June 2018, only 4588 video's are available for question and answers")
+st.write("Last update on 18 June 2024, 4588 video's are available for question and answers")
 question = st.text_input("Ask any question regarding the bbc news youtube channel video's.")
 
 # Submit button
@@ -159,3 +159,8 @@ if len(data) > PAGE_SIZE:
     st.write("Pagination:")
     total_pages = (len(data) // PAGE_SIZE) + 1
     st.write(f"Page {page_number} of {total_pages}")
+
+
+# Footer
+st.markdown('---')
+st.write('All copyrights are reserved 2024. For more information, contact [leodeveloper@gmail.com](mailto:leodeveloper@gmail.com).')
