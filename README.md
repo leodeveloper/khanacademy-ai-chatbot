@@ -41,10 +41,6 @@ Contributing
 
 We welcome contributions! Please fork the repository and submit a pull request with your changes.
 
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
 Contact
 
 For questions or support, please email leodeveloper@gmail.com.
