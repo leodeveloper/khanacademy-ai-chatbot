@@ -29,7 +29,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
-llm = ChatGroq(temperature=1,model="llama3-70b-8192")
+llm = ChatGroq(temperature=1,model="gemma-7b-it")
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
