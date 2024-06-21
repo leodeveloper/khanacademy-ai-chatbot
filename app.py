@@ -10,9 +10,7 @@ import streamlit as st
 import json
 from datetime import datetime
 from langchain_chroma import Chroma
-from langchain_community.embeddings.sentence_transformer import (
-    SentenceTransformerEmbeddings,
-)
+#from langchain_community.embeddings.sentence_transformer import (SentenceTransformerEmbeddings,)
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -31,7 +29,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
-llm = ChatGroq(temperature=0,model="gemma-7b-it")
+llm = ChatGroq(temperature=1,model="gemma-7b-it")
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
@@ -53,47 +51,51 @@ Helpful Answer:
 """
 
 def loadModel(question):
-    question = f"{question}"
-    st.write(f"You asked: {question}")
-    modelname=os.getenv("modelname")
-    collectionname=os.getenv("collectionname")
+    try:
+        question = f"{question}"
+        st.write(f"You asked: {question}")
+        modelname=os.getenv("modelname")
+        collectionname=os.getenv("collectionname")
 
-    embedding_function = SentenceTransformerEmbeddings(model_name=modelname)
-    db=Chroma(collection_name=collectionname,embedding_function=embedding_function,persist_directory="embeding/chromadb")
-    retriever = db.as_retriever(search_type="mmr",search_kwargs={'k':1})
-    #search_kwargs={'k':1}
-    #"What donalod trump said about the FBI raid? and what happened in pakistan floods?"
-    #response2=retriever.invoke(question)
-    #st.write(response2[0].page_content)
+        embedding_function = HuggingFaceEmbeddings(model_name=modelname)
+        db=Chroma(collection_name=collectionname,embedding_function=embedding_function,persist_directory="embeding/chromadb")
+        retriever = db.as_retriever(search_type="mmr",search_kwargs={'k':1})
+        #search_kwargs={'k':1}
+        #"What donalod trump said about the FBI raid? and what happened in pakistan floods?"
+        #response2=retriever.invoke(question)
+        #st.write(response2[0].page_content)
 
 
 
-    llama_prompt = PromptTemplate(template=template, input_variables=["text"])
+        llama_prompt = PromptTemplate(template=template, input_variables=["text"])
 
-    chain_type_kwargs = {"prompt": llama_prompt}
+        chain_type_kwargs = {"prompt": llama_prompt}
 
-    # create the chain to answer questions
-    #qa_chain = RetrievalQA.from_chain_type(llm=llm,
-    #                                chain_type="stuff",
-    #                                retriever=retriever,
-    #                                return_source_documents=True)
+        # create the chain to answer questions
+        #qa_chain = RetrievalQA.from_chain_type(llm=llm,
+        #                                chain_type="stuff",
+        #                                retriever=retriever,
+        #                                return_source_documents=True)
 
-    #chain = prompt | llm
-    #response=qa_chain.invoke(question)
-    #process_llm_response(response)
-    st.write("--------------------------------------------")
-    custom_rag_prompt = PromptTemplate.from_template(template)
+        #chain = prompt | llm
+        #response=qa_chain.invoke(question)
+        #process_llm_response(response)
+        st.write("--------------------------------------------")
+        custom_rag_prompt = PromptTemplate.from_template(template)
 
-    rag_chain = (
-        {"context": retriever | format_docs, "question": RunnablePassthrough()}
-        | custom_rag_prompt
-        | llm
-        | StrOutputParser()
-        )
-    
-    response=rag_chain.invoke(f"{question} please must include the youtube url and publish date in the answer")
-    st.write(response)
-    #return response
+        rag_chain = (
+            {"context": retriever | format_docs, "question": RunnablePassthrough()}
+            | custom_rag_prompt
+            | llm
+            | StrOutputParser()
+            )
+        
+        response=rag_chain.invoke(f"{question} please must include the youtube url and publish date in the answer")
+        st.write(response)
+        #return response
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        st.write("Failed to load the model or process the request. Please check the logs for more details.")
 
 
 # Load the JSON data
