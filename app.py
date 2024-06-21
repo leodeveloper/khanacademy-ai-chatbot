@@ -29,7 +29,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
-llm = ChatGroq(temperature=1,model="gemma-7b-it")
+llm = ChatGroq(temperature=1,model="llama3-70b-8192")
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
@@ -128,7 +128,7 @@ st.title("BBC Youtube Channel")
 
 # Big question bar
 st.write("Generative AI BBC youtube channel chatbot.")
-st.write("Last update on 18 June 2024, 4588 video's are available for question and answers")
+st.write("Last update on 20 June 2024, 4588 video's are available for question and answers")
 st.write("For full transcripts in English and other languages, email me at leodeveloper@gmail.com.")
 question = st.text_input("Ask any question regarding the bbc news youtube channel video's.")
 
