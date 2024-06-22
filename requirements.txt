@@ -2,13 +2,13 @@ unstructured
 streamlit
 langchain_community
 langchain
-langchain-chroma
 langchain_groq
 sentence-transformers
 python-dotenv
 langchain-huggingface
-chromadb
-#only install for local
-#pysqlite3
-#do not install locally only for the streamlit
-pysqlite3-binary
+tiktoken
+langchain_pinecone
+pinecone-client
+motor
+pydantic
+cryptography

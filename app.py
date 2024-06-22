@@ -1,53 +1,45 @@
-
-import sqlite3
-
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 import os
 import streamlit as st
 import json
 from datetime import datetime
-from langchain_chroma import Chroma
-#from langchain_community.embeddings.sentence_transformer import (SentenceTransformerEmbeddings,)
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_pinecone import PineconeVectorStore
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
-import chromadb
-import chromadb.config
+from pinecone import Pinecone
+from utils_dycrypt import decrypt_string
+import pprint
 
-st.set_page_config(page_title="BBC youtube channel Generative ai chatbot", page_icon="")
+
+
+st.set_page_config(page_title="Mooro youtube channel Generative ai chatbot", page_icon="")
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 from dotenv import load_dotenv
 load_dotenv()
-
+os.environ['PINECONE_API_KEY']=os.getenv("PINECONE_API_KEY1")
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
-llm = ChatGroq(temperature=1,model="gemma-7b-it")
+llm = ChatGroq(temperature=0.5,model="llama3-70b-8192")
+key=os.getenv("encryptkey")
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 def process_llm_response(llm_response):
     st.write(llm_response['result'])
-    st.write('\n\nSources:')
-    for source in llm_response["source_documents"]:
-        st.write(source.metadata['source'])
+    #st.write("---------------------------")
 
-template = """You are a help full BBC helpfull assistant. please include the youtube url, publish date and source if available. 
-Don't try to make up an answer. Also do not add any information which is not available in the context.
+qa_template = """You are a youtube video's transcript expert. Use the given context to answer the question.
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+must add youtubelink, publish date and title.
 
-{context}
+Context: {context}
 
 Question: {question}
-
-Helpful Answer:
+Answer:
 """
 
 def loadModel(question):
@@ -55,43 +47,28 @@ def loadModel(question):
         question = f"{question}"
         st.write(f"You asked: {question}")
         modelname=os.getenv("modelname")
-        collectionname=os.getenv("collectionname")
-
+        pc = Pinecone()
+        index_name=os.getenv("pinecode_index_name")
         embedding_function = HuggingFaceEmbeddings(model_name=modelname)
-        db=Chroma(collection_name=collectionname,embedding_function=embedding_function,persist_directory="embeding/chromadb")
-        retriever = db.as_retriever(search_type="mmr",search_kwargs={'k':1})
-        #search_kwargs={'k':1}
-        #"What donalod trump said about the FBI raid? and what happened in pakistan floods?"
-        #response2=retriever.invoke(question)
-        #st.write(response2[0].page_content)
-
-
-
-        llama_prompt = PromptTemplate(template=template, input_variables=["text"])
-
-        chain_type_kwargs = {"prompt": llama_prompt}
-
-        # create the chain to answer questions
-        #qa_chain = RetrievalQA.from_chain_type(llm=llm,
-        #                                chain_type="stuff",
-        #                                retriever=retriever,
-        #                                return_source_documents=True)
-
-        #chain = prompt | llm
-        #response=qa_chain.invoke(question)
-        #process_llm_response(response)
-        st.write("--------------------------------------------")
-        custom_rag_prompt = PromptTemplate.from_template(template)
-
-        rag_chain = (
-            {"context": retriever | format_docs, "question": RunnablePassthrough()}
-            | custom_rag_prompt
-            | llm
-            | StrOutputParser()
-            )
+        docsearch=PineconeVectorStore.from_existing_index(index_name=index_name,embedding=embedding_function)
         
-        response=rag_chain.invoke(f"{question} please must include the youtube url and publish date in the answer")
-        st.write(response)
+        retriever = docsearch.as_retriever(search_type="mmr",search_kwargs={'k':1})
+        # Define the prompt template for Q&A
+        qa_prompt_template = PromptTemplate.from_template(qa_template)
+
+        # Define the RetrievalQ&A chain
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=retriever,
+            return_source_documents=True,
+            chain_type="stuff",
+            chain_type_kwargs={"prompt": qa_prompt_template},
+        )
+
+
+        # Perform retrieval Q&A
+        response=qa_chain({"query": f"{question}"})
+        process_llm_response(response)
         #return response
     except Exception as e:
         st.error(f"An error occurred: {e}")
@@ -124,13 +101,13 @@ st.markdown("""
 PAGE_SIZE = 9
 
 # Streamlit app
-st.title("BBC Youtube Channel")
+st.title("Mooro Youtube Channel")
 
 # Big question bar
-st.write("Generative AI BBC youtube channel chatbot.")
-st.write("Last update on 20 June 2024, 4588 video's are available for question and answers")
+st.write("Generative AI Mooro youtube channel chatbot.")
+st.write("Last update on 22 June 2024, 142 video's are available for question and answers")
 st.write("For full transcripts in English and other languages, email me at leodeveloper@gmail.com.")
-question = st.text_input("Ask any question regarding the bbc news youtube channel video's.")
+question = st.text_input("Ask any question regarding the mooro youtube channel video's.")
 
 # Submit button
 if st.button("Submit"):
@@ -142,7 +119,7 @@ if st.button("Submit"):
 
 
 # Display images in a grid
-st.subheader("BBC youtube video's")
+st.subheader("Mooro youtube video's")
 page_number = st.number_input('Page Number', min_value=1, max_value=(len(data) // PAGE_SIZE) + 1, value=1)
 start_index = (page_number - 1) * PAGE_SIZE
 end_index = start_index + PAGE_SIZE
@@ -150,7 +127,7 @@ end_index = start_index + PAGE_SIZE
 for i, item in enumerate(data[start_index:end_index]):
     if i % 3 == 0:
         cols = st.columns(3)
-    cols[i % 3].image(item['thumbnail_url'])
+    cols[i % 3].image(decrypt_string(item['thumbnail_url'],key))
     cols[i % 3].markdown(f"<div class='truncate-title'>{item['title']}</div>", unsafe_allow_html=True)
     cols[i % 3].write(item['publish_date'].strftime("%d %b %Y"))
     
@@ -165,3 +142,6 @@ if len(data) > PAGE_SIZE:
 # Footer
 st.markdown('---')
 st.write('All copyrights are reserved 2024. For more information, contact [leodeveloper@gmail.com](mailto:leodeveloper@gmail.com).')
+
+
+
