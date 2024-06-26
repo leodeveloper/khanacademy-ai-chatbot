@@ -1,16 +1,16 @@
-# Mooro AI Chat Bot
+# khanacademy AI Chat Bot
 
-![Mooro AI Chat Bot](https://github.com/leodeveloper/mooroosicity-ai-chatbot/blob/main/mooro%20ai%20youtube%20chatbot.png)
+![khanacademy AI Chat Bot](https://github.com/leodeveloper/khanacademy-ai-chatbot/blob/main/khanacadmy.png)
 
-Welcome to the Mooro AI Chat Bot repository! This project features an AI-powered chatbot for the Mooro YouTube channel, offering access to transcripts from 142 videos, covering content from 2013 to June 20, 2024.
+Welcome to the khanacademy AI Chat Bot repository! This project features an AI-powered chatbot for the khanacademy YouTube channel, offering access to transcripts from 4583 videos, covering content from 07 Oct 2013 to June 20, 2024.
 
 ## Features
-- **AI Chat Bot**: Interact with an AI chatbot tailored for the Mooro YouTube channel.
+- **AI Chat Bot**: Interact with an AI chatbot tailored for the khanacademy YouTube channel.
 - **Extensive Transcript Database**: Access transcripts from 4,588 videos.
 - **Multi-Language Support**: Get transcripts in English and other languages.
 
 ## Getting Started
-To get started with the Mooro AI Chat Bot, follow these instructions.
+To get started with the khanacademy AI Chat Bot, follow these instructions.
 
 ### Prerequisites
 
@@ -21,12 +21,12 @@ To get started with the Mooro AI Chat Bot, follow these instructions.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/leodeveloper/mooroosicity-ai-chatbot
-   cd Mooro-ai-chat-bot
+   git clone https://github.com/leodeveloper/khanacademy-ai-chatbot
+   cd khanacademy-ai-chat-bot
 
 Usage
 
-Interact with the AI chatbot to explore the Mooro YouTube channel content. You can access transcripts from a wide range of videos and request them in various languages.
+Interact with the AI chatbot to explore the khanacademy YouTube channel content. You can access transcripts from a wide range of videos and request them in various languages.
 
 ##Accessing Full Transcripts
 
@@ -34,7 +34,7 @@ Interact with the AI chatbot to explore the Mooro YouTube channel content. You c
 
 Demo
 
-##Check out the live demo: Mooro AI Chat Bot https://moorochatbot.streamlit.app/
+##Check out the live demo: khanacademy AI Chat Bot https://khanacademychatbot.streamlit.app/
 
 Contributing
 
