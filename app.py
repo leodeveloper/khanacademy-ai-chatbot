@@ -101,17 +101,16 @@ st.markdown("""
 PAGE_SIZE = 9
 
 # Streamlit app
-st.title("khanacademy Youtube Channel")
+st.title("Generative AI khanacademy youtube channel chatbot")
 
 # Big question bar
-st.write("Generative AI khanacademy youtube channel chatbot.")
 st.write("Last update on 24 June 2024, 4583 video's are available for question and answers")
-st.write("For full transcripts in English and other languages, email me at leodeveloper@gmail.com.")
+st.write("This project is not yet funded and using very minimal resources")
 question = st.text_input("Ask any question regarding the khanacademy youtube channel video's.")
 
 # Submit button
 if st.button("Submit"):
-    with st.spinner("Waiting......"):
+    with st.spinner("Please wait......"):
         #st.write(f"You asked: {question}")
         loadModel(question)
     
@@ -120,6 +119,7 @@ if st.button("Submit"):
 
 # Display images in a grid
 st.subheader("khanacademy youtube video's")
+st.write("For full transcripts in English and other languages, email me at leodeveloper@gmail.com.")
 page_number = st.number_input('Page Number', min_value=1, max_value=(len(data) // PAGE_SIZE) + 1, value=1)
 start_index = (page_number - 1) * PAGE_SIZE
 end_index = start_index + PAGE_SIZE
