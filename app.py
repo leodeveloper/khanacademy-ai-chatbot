@@ -15,7 +15,7 @@ import pprint
 
 
 
-st.set_page_config(page_title="Mooro youtube channel Generative ai chatbot", page_icon="")
+st.set_page_config(page_title="khanacademy youtube channel Generative ai chatbot", page_icon="")
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 from dotenv import load_dotenv
@@ -101,13 +101,13 @@ st.markdown("""
 PAGE_SIZE = 9
 
 # Streamlit app
-st.title("Mooro Youtube Channel")
+st.title("khanacademy Youtube Channel")
 
 # Big question bar
-st.write("Generative AI Mooro youtube channel chatbot.")
-st.write("Last update on 22 June 2024, 142 video's are available for question and answers")
+st.write("Generative AI khanacademy youtube channel chatbot.")
+st.write("Last update on 24 June 2024, 4583 video's are available for question and answers")
 st.write("For full transcripts in English and other languages, email me at leodeveloper@gmail.com.")
-question = st.text_input("Ask any question regarding the mooro youtube channel video's.")
+question = st.text_input("Ask any question regarding the khanacademy youtube channel video's.")
 
 # Submit button
 if st.button("Submit"):
@@ -119,7 +119,7 @@ if st.button("Submit"):
 
 
 # Display images in a grid
-st.subheader("Mooro youtube video's")
+st.subheader("khanacademy youtube video's")
 page_number = st.number_input('Page Number', min_value=1, max_value=(len(data) // PAGE_SIZE) + 1, value=1)
 start_index = (page_number - 1) * PAGE_SIZE
 end_index = start_index + PAGE_SIZE
