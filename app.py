@@ -129,7 +129,7 @@ for i, item in enumerate(data[start_index:end_index]):
         cols = st.columns(3)
     cols[i % 3].image(decrypt_string(item['thumbnail_url'],key))
     cols[i % 3].markdown(f"<div class='truncate-title'>{item['title']}</div>", unsafe_allow_html=True)
-    cols[i % 3].write(item['publish_date'].strftime("%d %b %Y"))
+    cols[i % 3].write(f"{item['publish_date'].strftime('%d %b %Y')} - <a href='https://youtubetranslate.streamlit.app/?source={item['source']}'>Translate</a>", unsafe_allow_html=True)
     
 
 # If there are more than PAGE_SIZE items, add pagination
