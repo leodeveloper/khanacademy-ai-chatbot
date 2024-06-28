@@ -34,8 +34,7 @@ Interact with the AI chatbot to explore the khanacademy YouTube channel content.
 
 Demo
 
-##Check out the live demo: khanacademy AI Chat Bot https://khanacademychatbot.streamlit.app/
-
+##Check out the live demo: khanacademy AI Chat Bot https://khanacademy.streamlit.app/
 Contributing
 
 We welcome contributions! Please fork the repository and submit a pull request with your changes.
